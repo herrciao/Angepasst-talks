@@ -1,0 +1,145 @@
+---
+import { getCollection } from 'astro:content';
+import { CATEGORIES, CATEGORY_COLORS, getCategoryColor, type ColorKey } from '@/config';
+import Newsletter from './Newsletter.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+// Category counts
+const categoryCounts = allPosts.reduce<Record<string, number>>((acc, post) => {
+  acc[post.data.category] = (acc[post.data.category] ?? 0) + 1;
+  return acc;
+}, {});
+
+// Featured posts
+const featured = allPosts
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+// Recent if no featured
+const recent = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+const popularPosts = featured.length > 0 ? featured : recent;
+
+// All tags with counts
+const tagCounts = allPosts.reduce<Record<string, number>>((acc, post) => {
+  post.data.tags.forEach((tag) => {
+    acc[tag] = (acc[tag] ?? 0) + 1;
+  });
+  return acc;
+}, {});
+
+const topTags = Object.entries(tagCounts)
+  .sort(([, a], [, b]) => b - a)
+  .slice(0, 20)
+  .map(([tag]) => tag);
+---
+
+<aside class="w-full space-y-6">
+  <!-- About Card -->
+  <div class="card p-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-xl font-bold text-indigo-600">
+        C
+      </div>
+      <div>
+        <p class="font-bold text-gray-900 text-sm">Chao</p>
+        <p class="text-xs text-gray-500">思考者 · 記錄者</p>
+      </div>
+    </div>
+    <p class="text-xs text-gray-500 leading-relaxed">
+      把大腦裡值得留下來的想法，用文字記錄下來。
+    </p>
+    <a href="/about" class="btn-ghost mt-3 w-full justify-center text-xs">了解更多</a>
+  </div>
+
+  <!-- Categories -->
+  <div class="card p-5">
+    <h3 class="font-bold text-gray-900 text-sm mb-3 pb-2 border-b border-gray-100">分類</h3>
+    <ul class="space-y-1">
+      {CATEGORIES.map((cat) => {
+        const colorKey = getCategoryColor(cat.id) as ColorKey;
+        const colors = CATEGORY_COLORS[colorKey];
+        const count = categoryCounts[cat.id] ?? 0;
+        return (
+          <li>
+            <a
+              href={cat.href}
+              class="flex items-center justify-between py-1.5 px-2 rounded hover:bg-gray-50 group transition-colors"
+            >
+              <span class="text-sm text-gray-700 group-hover:text-indigo-600">{cat.label}</span>
+              <span class:list={['text-xs px-1.5 py-0.5 rounded-full font-medium', colors.bg, colors.text]}>
+                {count}
+              </span>
+            </a>
+            {cat.children && (
+              <ul class="pl-4 mt-0.5 space-y-0.5">
+                {cat.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class="block text-xs text-gray-500 py-0.5 hover:text-indigo-600 transition-colors"
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+
+  <!-- Popular Posts -->
+  <div class="card p-5">
+    <h3 class="font-bold text-gray-900 text-sm mb-3 pb-2 border-b border-gray-100">精選文章</h3>
+    <ul class="space-y-3">
+      {popularPosts.map((post, i) => (
+        <li class="flex items-start gap-2.5">
+          <span class="text-indigo-300 font-bold text-sm shrink-0 w-4">{i + 1}</span>
+          <a
+            href={`/posts/${post.slug}`}
+            class="text-sm text-gray-700 hover:text-indigo-600 leading-snug transition-colors"
+          >
+            {post.data.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Tags -->
+  {topTags.length > 0 && (
+    <div class="card p-5">
+      <h3 class="font-bold text-gray-900 text-sm mb-3 pb-2 border-b border-gray-100">標籤</h3>
+      <div class="flex flex-wrap gap-1.5">
+        {topTags.map((tag) => (
+          <a
+            href={`/tag/${tag}`}
+            class="text-xs text-gray-500 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-2 py-0.5 rounded-full transition-colors"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Newsletter -->
+  <Newsletter />
+
+  <!-- RSS -->
+  <div class="text-center">
+    <a href="/rss.xml" class="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-indigo-500 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/>
+      </svg>
+      RSS 訂閱
+    </a>
+  </div>
+</aside>

@@ -1,0 +1,178 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { SITE, CATEGORIES, CATEGORY_COLORS, getCategoryColor, type ColorKey } from '@/config';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Sidebar from '@/components/Sidebar.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
+import Comments from '@/components/Comments.astro';
+import RelatedPosts from '@/components/RelatedPosts.astro';
+import type { CollectionEntry as CE } from 'astro:content';
+import '@/styles/global.css';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  headings: { depth: number; slug: string; text: string }[];
+  allPosts: CE<'posts'>[];
+}
+
+const { post, headings, allPosts } = Astro.props;
+const { title, description, date, updatedDate, category, subcategory, tags, image } = post.data;
+
+const catConfig = CATEGORIES.find((c) => c.id === category);
+const subCatConfig = catConfig?.children?.find((c) => c.id === subcategory);
+const colorKey = getCategoryColor(category) as ColorKey;
+const colors = CATEGORY_COLORS[colorKey] ?? CATEGORY_COLORS.gray;
+
+const fullTitle = `${title} · ${SITE.name}`;
+const canonicalURL = new URL(`/posts/${post.slug}`, SITE.url);
+
+const formattedDate = new Intl.DateTimeFormat('zh-TW', {
+  year: 'numeric', month: 'long', day: 'numeric',
+}).format(date);
+
+const formattedUpdated = updatedDate
+  ? new Intl.DateTimeFormat('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' }).format(updatedDate)
+  : null;
+
+const crumbs = [
+  ...(catConfig ? [{ label: catConfig.label, href: catConfig.href }] : []),
+  ...(subCatConfig ? [{ label: subCatConfig.label, href: subCatConfig.href }] : []),
+  { label: title },
+];
+---
+
+<!doctype html>
+<html lang="zh-TW" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description ?? title} />
+    <meta name="author" content={SITE.author} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description ?? title} />
+    {image && <meta property="og:image" content={new URL(image, SITE.url)} />}
+    <meta property="article:published_time" content={date.toISOString()} />
+    {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description ?? title} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": title,
+      "description": description,
+      "datePublished": date.toISOString(),
+      "dateModified": (updatedDate ?? date).toISOString(),
+      "author": { "@type": "Person", "name": SITE.author },
+      "publisher": { "@type": "Organization", "name": SITE.name },
+      "url": canonicalURL.toString(),
+    })} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+
+    <main class="flex-1">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex gap-8 items-start">
+          <!-- TOC (left) -->
+          {headings.length > 2 && (
+            <TableOfContents headings={headings} />
+          )}
+
+          <!-- Article -->
+          <article class="flex-1 min-w-0 max-w-3xl">
+            <Breadcrumb crumbs={crumbs} />
+
+            <!-- Category badge -->
+            <div class="flex flex-wrap gap-2 mb-4">
+              {catConfig && (
+                <a
+                  href={catConfig.href}
+                  class:list={['text-xs font-medium px-2.5 py-1 rounded-full border', colors.bg, colors.text, colors.border]}
+                >
+                  {catConfig.label}
+                </a>
+              )}
+              {subCatConfig && (
+                <a
+                  href={subCatConfig.href}
+                  class:list={['text-xs font-medium px-2.5 py-1 rounded-full border', colors.bg, colors.text, colors.border]}
+                >
+                  {subCatConfig.label}
+                </a>
+              )}
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight mb-4">
+              {title}
+            </h1>
+
+            <!-- Meta -->
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500 mb-6 pb-6 border-b border-gray-200">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <time datetime={date.toISOString()}>{formattedDate}</time>
+              </span>
+              {formattedUpdated && (
+                <span class="text-xs text-gray-400">最後更新：{formattedUpdated}</span>
+              )}
+              <span>{SITE.author}</span>
+            </div>
+
+            <!-- Content -->
+            <div class="prose-chao">
+              <slot />
+            </div>
+
+            <!-- Tags -->
+            {tags.length > 0 && (
+              <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <a
+                      href={`/tag/${tag}`}
+                      class="text-sm text-gray-500 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-1 rounded-full transition-colors"
+                    >
+                      #{tag}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <RelatedPosts
+              currentSlug={post.slug}
+              category={category}
+              tags={tags}
+              allPosts={allPosts}
+            />
+
+            <Comments />
+          </article>
+
+          <!-- Sidebar -->
+          <div class="hidden lg:block w-72 shrink-0">
+            <Sidebar />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,97 @@
+---
+import { SITE, CATEGORIES } from '@/config';
+---
+
+<header class="bg-gray-900 sticky top-0 z-50 shadow-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-14">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 text-white font-bold text-lg hover:text-indigo-300 transition-colors">
+        <span class="text-indigo-400 text-xl">⬡</span>
+        {SITE.name}
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {CATEGORIES.map((cat) => (
+          <div class="relative group">
+            <a
+              href={cat.href}
+              class="nav-link px-3 py-2 rounded flex items-center gap-1 hover:bg-gray-800"
+            >
+              {cat.label}
+              {cat.children && (
+                <svg class="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              )}
+            </a>
+            {cat.children && (
+              <div class="absolute top-full left-0 mt-1 w-40 bg-white rounded-md shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+                {cat.children.map((child) => (
+                  <a href={child.href} class="nav-dropdown-item">
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        <a href="/about" class="nav-link px-3 py-2 rounded hover:bg-gray-800">關於我</a>
+        <a href="/contact" class="nav-link px-3 py-2 rounded hover:bg-gray-800">聯絡</a>
+      </nav>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="menu-toggle"
+        class="md:hidden text-gray-300 hover:text-white p-2 rounded"
+        aria-label="開啟選單"
+      >
+        <svg id="icon-open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-700">
+    <div class="px-4 py-3 space-y-1">
+      {CATEGORIES.map((cat) => (
+        <div>
+          <a href={cat.href} class="block text-gray-200 font-medium py-2 hover:text-indigo-300">
+            {cat.label}
+          </a>
+          {cat.children && (
+            <div class="pl-4 space-y-1 mb-2">
+              {cat.children.map((child) => (
+                <a href={child.href} class="block text-gray-400 text-sm py-1 hover:text-indigo-300">
+                  {child.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+      <a href="/about" class="block text-gray-200 font-medium py-2 hover:text-indigo-300">關於我</a>
+      <a href="/contact" class="block text-gray-200 font-medium py-2 hover:text-indigo-300">聯絡</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  toggle?.addEventListener('click', () => {
+    const isHidden = menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden', !isHidden);
+    iconOpen?.classList.toggle('hidden', isHidden!);
+    iconClose?.classList.toggle('hidden', !isHidden);
+  });
+</script>

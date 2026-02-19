@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  currentSlug: string;
+  category: string;
+  tags: string[];
+  allPosts: CollectionEntry<'posts'>[];
+}
+
+const { currentSlug, category, tags, allPosts } = Astro.props;
+
+const related = allPosts
+  .filter((p) => p.slug !== currentSlug && !p.data.draft)
+  .map((p) => {
+    let score = 0;
+    if (p.data.category === category) score += 3;
+    tags.forEach((tag) => { if (p.data.tags.includes(tag)) score += 1; });
+    return { post: p, score };
+  })
+  .filter((x) => x.score > 0)
+  .sort((a, b) => b.score - a.score || b.post.data.date.valueOf() - a.post.data.date.valueOf())
+  .slice(0, 4)
+  .map((x) => x.post);
+---
+
+{related.length > 0 && (
+  <section class="mt-12 pt-8 border-t border-gray-200">
+    <h2 class="text-lg font-bold text-gray-900 mb-4">相關文章</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      {related.map((post) => <PostCard post={post} compact />)}
+    </div>
+  </section>
+)}

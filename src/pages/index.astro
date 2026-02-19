@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { SITE } from '@/config';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sorted = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const page = 1;
+const totalPages = Math.ceil(sorted.length / SITE.postsPerPage);
+const posts = sorted.slice(0, SITE.postsPerPage);
+---
+
+<BaseLayout>
+  <div class="space-y-4">
+    {posts.map((post) => <PostCard post={post} />)}
+    {posts.length === 0 && (
+      <div class="text-center py-20 text-gray-400">
+        <p class="text-lg font-medium">還沒有文章</p>
+        <p class="text-sm mt-1">把你的第一篇 .md 文章放進 src/content/posts/ 資料夾吧！</p>
+      </div>
+    )}
+  </div>
+  <Pagination currentPage={page} totalPages={totalPages} baseUrl="/" />
+</BaseLayout>

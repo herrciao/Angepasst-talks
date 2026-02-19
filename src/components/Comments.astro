@@ -1,0 +1,32 @@
+---
+import { SITE } from '@/config';
+const { giscus } = SITE;
+---
+
+<section class="mt-12 pt-8 border-t border-gray-200">
+  <h2 class="text-lg font-bold text-gray-900 mb-6">留言討論</h2>
+
+  {giscus.repoId === 'PLACEHOLDER' ? (
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
+      <p class="font-medium mb-1">留言功能尚未設定</p>
+      <p>請前往 <a href="https://giscus.app" class="underline" target="_blank">giscus.app</a> 取得你的 repo 設定，然後更新 <code class="bg-amber-100 px-1 rounded">src/config.ts</code> 中的 giscus 欄位。</p>
+    </div>
+  ) : (
+    <div
+      class="giscus"
+      data-repo={giscus.repo}
+      data-repo-id={giscus.repoId}
+      data-category={giscus.category}
+      data-category-id={giscus.categoryId}
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="light"
+      data-lang="zh-TW"
+      data-loading="lazy"
+    />
+    <script src="https://giscus.app/client.js" async />
+  )}
+</section>

@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/Breadcrumb.astro';
+import { SITE } from '@/config';
+---
+
+<BaseLayout title="關於我" description={`關於 ${SITE.author} 的個人介紹`}>
+  <Breadcrumb crumbs={[{ label: '關於我' }]} />
+
+  <article class="max-w-2xl">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">關於我</h1>
+
+    <div class="prose-chao">
+      <p>
+        嗨，我是 Chao。
+      </p>
+
+      <p>
+        這個部落格是我的大腦外掛記憶體，專門用來記錄那些值得留下來的想法。
+        商業思維、科技觀點、讀書筆記，還有日常觀察——只要是讓我停下來思考的東西，
+        我都會試著把它寫成文字。
+      </p>
+
+      <h2>為什麼寫作？</h2>
+      <p>
+        因為思考沒有被寫下來，就等於沒有思考過。
+        寫作是強迫自己把模糊的直覺變成清晰論述的最好方法。
+      </p>
+
+      <h2>聯絡我</h2>
+      <p>
+        有任何想法或合作提案，歡迎透過
+        <a href="/contact">聯絡表單</a>或直接寄信到
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> 跟我說。
+      </p>
+    </div>
+  </article>
+</BaseLayout>
