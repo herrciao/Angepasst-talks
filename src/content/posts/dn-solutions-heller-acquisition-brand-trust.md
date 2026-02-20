@@ -1,7 +1,7 @@
 ---
 title: "韓國第三大買下德國百年老廠：DN Solutions 收購 HELLER 背後的三層邏輯"
 description: "DN Solutions 完成收購德國 HELLER，合併營收達 20 億歐元。但這筆交易買的不只是機台產能，還有 130 年才能累積出來的東西——以及幾個不容易回答的問題。"
-date: 2026-02-19
+date: 2026-02-20
 category: "business"
 subcategory: "strategy"
 tags: ["芒格鍛鍊", "併購", "製造業", "規模效應", "品牌策略", "工具機"]

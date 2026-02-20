@@ -1,7 +1,7 @@
 ---
 title: "Fortune 這份工具機報告說 CAGR 8.9%——但你的訂單簿有感嗎？"
 description: "Fortune Business Insights 最新報告預測全球工具機市場 2034 年將達 1,890 億美元。但報告的敘事和你每天在公司感受到的世界，是同一個世界嗎？"
-date: 2026-02-19
+date: 2026-02-20
 category: "business"
 subcategory: "strategy"
 tags: ["芒格鍛鍊", "工具機", "製造業", "CNC", "日本", "精密加工", "市場分析"]
