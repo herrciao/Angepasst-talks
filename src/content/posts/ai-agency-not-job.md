@@ -1,10 +1,10 @@
 ---
-title: "AI 搶不走的東西叫 Agency"
-description: "Naval 說沒有創業者在擔心 AI，因為 AI 能取代的是「工作」，不是 agency。當每個人都能用英語寫程式，真正的差距不在技術——在你是 Fachkraft 還是 Unternehmer。"
+title: "AI 搶得走工作，搶不走你的方向盤"
+description: "Naval 說沒有創業者在擔心 AI，因為 AI 能取代的是「工作」，不是你判斷局勢、決定方向的掌舵權。當每個人都能用英語寫程式，真正的差距不在技術——在你是被浪推著走，還是自己在掌舵。"
 date: 2026-02-23
 category: "tech"
 subcategory: "ai"
-tags: ["AI", "創業", "agency", "Naval Ravikant", "芒格鍛鍊"]
+tags: ["AI", "創業", "決策主體性", "Naval Ravikant", "芒格鍛鍊"]
 featured: false
 ---
 
@@ -94,9 +94,11 @@ Unternehmer 歡迎 AI，因為 AI 能幫他做他想做的事。
 
 差別在哪？
 
-**Agency。**
+**掌舵權。**
 
-創業者有自己的方向、自己的判斷、自己的意志。AI 只是一個更好用的工具。
+誰在決定方向？誰在判斷局勢？誰有能力改變局勢？
+
+創業者手上握的是舵。他看得到海象，他決定往哪開，他在風浪裡做判斷。AI 是一具更強的引擎——但引擎不會決定方向。
 
 「工作者」沒有方向。他只有一個 slot 要填。當 AI 能填那個 slot，他就沒有存在的理由了。
 
