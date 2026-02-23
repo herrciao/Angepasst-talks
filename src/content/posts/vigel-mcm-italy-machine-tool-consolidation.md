@@ -1,7 +1,7 @@
 ---
 title: "繼 DN Solutions 買 HELLER 之後，義大利也開始了：Vigel 吃下 MCM 代表什麼"
 description: "2026 年 1 月 30 日，義大利 Vigel 完成收購 MCM，背後是同一個 GENFIN 控股。這不只是兩家義大利公司合併，這是整個中型工具機廠商在市場壓力下的結構性反應。"
-date: 2026-02-19
+date: 2026-02-23
 category: "business"
 subcategory: "strategy"
 tags: ["芒格鍛鍊", "工具機", "併購", "義大利", "航太加工", "製造業整合"]
