@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumb from '@/components/Breadcrumb.astro';
-import { SITE } from '@/config';
 ---
 
 <BaseLayout title="關於 AngepasstLab" description="AngepasstLab — 一間思考的校準室。工程邏輯拆商業判斷，持續校準觀點，讓思考貼合現實。">
@@ -109,8 +108,7 @@ import { SITE } from '@/config';
       <h2>聯絡我</h2>
       <p>
         有想法、有回饋、想合作：<br />
-        透過<a href="/contact">聯絡表單</a>，或直接寫信到
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>。
+        透過<a href="/contact">聯絡表單</a>跟我說。
       </p>
 
       <p class="text-gray-500 italic mt-12 text-center">
