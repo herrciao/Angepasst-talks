@@ -2,7 +2,7 @@
 title: "每分鐘切掉 1,516 立方公分的鈦合金——Starrag 這台機器到底做了什麼"
 description: "瑞士 Starrag 的 S1250 HD 五軸加工中心創下鈦合金切削世界紀錄。但真正值得看的不是數字本身，而是它背後挑戰的前提——以及這對整個高性能加工方向意味著什麼。"
 date: 2026-02-22
-updatedDate: 2026-02-22
+updatedDate: 2026-02-23
 category: "tech"
 subcategory: "trends"
 tags: ["芒格鍛鍊", "鈦合金", "五軸加工", "Starrag", "航太加工", "精密製造"]
