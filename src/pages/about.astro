@@ -4,34 +4,117 @@ import Breadcrumb from '@/components/Breadcrumb.astro';
 import { SITE } from '@/config';
 ---
 
-<BaseLayout title="關於我" description={`關於 ${SITE.author} 的個人介紹`}>
-  <Breadcrumb crumbs={[{ label: '關於我' }]} />
+<BaseLayout title="關於 AngepasstLab" description="AngepasstLab — 一間思考的校準室。工程邏輯拆商業判斷，持續校準觀點，讓思考貼合現實。">
+  <Breadcrumb crumbs={[{ label: '關於' }]} />
 
   <article class="max-w-2xl">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">關於我</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">關於 AngepasstLab</h1>
 
     <div class="prose-chao">
+      <p>Angepasst。</p>
+
       <p>
-        嗨，我是 Chao。
+        德文。動詞 <em>anpassen</em> 的過去分詞。
       </p>
 
       <p>
-        這個部落格是我的大腦外掛記憶體，專門用來記錄那些值得留下來的想法。
-        商業思維、科技觀點、讀書筆記，還有日常觀察——只要是讓我停下來思考的東西，
-        我都會試著把它寫成文字。
+        日常語境裡，它只是「調整、適應」。<br />
+        但在工程語境裡，它代表一個非常具體的狀態：
       </p>
 
-      <h2>為什麼寫作？</h2>
       <p>
-        因為思考沒有被寫下來，就等於沒有思考過。
-        寫作是強迫自己把模糊的直覺變成清晰論述的最好方法。
+        <strong>經過測量後的修正。</strong><br />
+        <strong>根據真實條件的校準。</strong><br />
+        <strong>在熱變形、負載、誤差都存在的情況下，仍然達到精準匹配。</strong>
+      </p>
+
+      <p>
+        在機械工程裡，真正的精度從來不是圖紙上的標稱尺寸。
+      </p>
+
+      <p>
+        是軸與孔之間，經過修整後的實際貼合。<br />
+        是軸承與座體之間，根據現場條件做出的配合。<br />
+        是設計假設的世界，和材料實際行為之間的差距——被你一步一步修掉。
+      </p>
+
+      <p>
+        那個狀態，就是 <em>angepasst</em>。
+      </p>
+
+      <h2>為什麼用這個詞</h2>
+
+      <p>我來自機械工程和工具機產業。</p>
+
+      <p>
+        在德國、美國、台灣、亞洲之間跑了很多年。<br />
+        賣過機台。進過工廠。坐在會議室裡，聽過報表說一套、現場說另一套的場面不知道多少次。
+      </p>
+
+      <p>做久了你會發現一件事：</p>
+
+      <p>
+        市場會變形。<br />
+        資本會熱脹冷縮。<br />
+        供應鏈會偏移。<br />
+        技術的折舊速度，比你的攤提表還快。
+      </p>
+
+      <p>
+        <strong>策略不能只是紙面上最漂亮的那個版本。</strong>
+      </p>
+
+      <p>
+        真正有效的策略，是經過測量、修正、再校準之後的版本。<br />
+        不是理論最優解。是現實最適解。
+      </p>
+
+      <p>
+        Angepasst = Calibrated under real-world conditions.
+      </p>
+
+      <h2>這個網站在做什麼</h2>
+
+      <p>
+        這不是新聞網站。<br />
+        這不是 industry blog。
+      </p>
+
+      <p><strong>這是一間思考的校準室。</strong></p>
+
+      <p>
+        我收集訊號——全球工具機產業、製造業、資本碰到金屬的那些地方。
+      </p>
+
+      <p>
+        我用工程邏輯拆商業判斷。<br />
+        用思維框架去應力測試，不是裝飾。
+      </p>
+
+      <p>然後寫下來。</p>
+
+      <p>
+        不是因為我每次都對。<br />
+        而是因為沒有被寫下來的思考，等於沒有被檢驗過。
+      </p>
+
+      <p>這裡每一篇文章，都跟一個精密零件走同樣的流程：</p>
+
+      <p>
+        測量。修正。再校準。<br />
+        看看還合不合。<br />
+        不合——再修。
       </p>
 
       <h2>聯絡我</h2>
       <p>
-        有任何想法或合作提案，歡迎透過
-        <a href="/contact">聯絡表單</a>或直接寄信到
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> 跟我說。
+        有想法、有回饋、想合作：<br />
+        透過<a href="/contact">聯絡表單</a>，或直接寫信到
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>。
+      </p>
+
+      <p class="text-gray-500 italic mt-12 text-center">
+        Angepasst — Where tolerance meets reality.
       </p>
     </div>
   </article>
