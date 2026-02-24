@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A/B 文章比較工具 — Chao's Brain</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e2e4ed;
+      --muted: #7b7f95;
+      --accent-a: #5b8af5;
+      --accent-b: #e96c6c;
+      --tag-a: #1e2a4a;
+      --tag-b: #3d1e1e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-left: auto;
+    }
+
+    .stat {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stat span {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .stat.a span { color: var(--accent-a); }
+    .stat.b span { color: var(--accent-b); }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 8px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .btn {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .btn:hover { border-color: var(--text); color: var(--text); }
+    .btn.active { background: var(--border); color: var(--text); }
+
+    .btn-load-a { border-color: var(--accent-a); color: var(--accent-a); }
+    .btn-load-a:hover { background: var(--tag-a); }
+    .btn-load-b { border-color: var(--accent-b); color: var(--accent-b); }
+    .btn-load-b:hover { background: var(--tag-b); }
+
+    /* ── Panels ── */
+    .panels {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+
+    .panel:last-child { border-right: none; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .version-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: .08em;
+    }
+
+    .badge-a { background: var(--tag-a); color: var(--accent-a); border: 1px solid var(--accent-a); }
+    .badge-b { background: var(--tag-b); color: var(--accent-b); border: 1px solid var(--accent-b); }
+
+    .panel-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .panel-drop {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      position: relative;
+    }
+
+    /* Drop zone overlay */
+    .drop-zone {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .drop-zone.hidden { display: none; }
+
+    .drop-icon {
+      font-size: 40px;
+      opacity: .4;
+    }
+
+    .drop-text {
+      font-size: 14px;
+    }
+
+    .drop-hint {
+      font-size: 12px;
+      opacity: .6;
+    }
+
+    .drop-zone.dragging {
+      background: rgba(255,255,255,.03);
+      border: 2px dashed var(--muted);
+      border-radius: 8px;
+    }
+
+    /* Rendered markdown */
+    .content { display: none; }
+    .content.visible { display: block; }
+
+    .content.raw pre {
+      white-space: pre-wrap;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    /* Markdown styles */
+    .content.rendered {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .content.rendered h1,
+    .content.rendered h2,
+    .content.rendered h3 {
+      color: var(--text);
+      margin: 1.5em 0 .6em;
+      line-height: 1.3;
+    }
+
+    .content.rendered h1 { font-size: 1.5em; }
+    .content.rendered h2 { font-size: 1.25em; border-bottom: 1px solid var(--border); padding-bottom: .4em; }
+    .content.rendered h3 { font-size: 1.1em; }
+
+    .content.rendered p { margin: .8em 0; }
+
+    .content.rendered blockquote {
+      border-left: 3px solid var(--accent-a);
+      margin: 1em 0;
+      padding: .6em 1em;
+      color: var(--muted);
+      background: rgba(91, 138, 245, .06);
+      border-radius: 0 6px 6px 0;
+      font-style: italic;
+    }
+
+    .panel:last-child .content.rendered blockquote {
+      border-left-color: var(--accent-b);
+      background: rgba(233, 108, 108, .06);
+    }
+
+    .content.rendered ul,
+    .content.rendered ol {
+      padding-left: 1.5em;
+      margin: .6em 0;
+    }
+
+    .content.rendered li { margin: .3em 0; }
+
+    .content.rendered code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: .85em;
+      background: rgba(255,255,255,.07);
+      padding: .15em .4em;
+      border-radius: 4px;
+    }
+
+    .content.rendered pre {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1em;
+      overflow-x: auto;
+      margin: .8em 0;
+    }
+
+    .content.rendered pre code {
+      background: none;
+      padding: 0;
+      font-size: 13px;
+    }
+
+    .content.rendered hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5em 0;
+    }
+
+    .content.rendered strong { color: #fff; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    /* Hidden file inputs */
+    input[type="file"] { display: none; }
+
+    /* Mode toggle in toolbar */
+    .mode-group {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .mode-group .btn {
+      border: none;
+      border-radius: 0;
+    }
+
+    .mode-group .btn:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    .sep {
+      width: 1px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>A/B 比較工具</h1>
+  <div class="stats">
+    <div class="stat a">Version A：<span id="count-a">—</span> 字</div>
+    <div class="stat b">Version B：<span id="count-b">—</span> 字</div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="btn btn-load-a" onclick="document.getElementById('file-a').click()">載入 Version A</button>
+  <button class="btn btn-load-b" onclick="document.getElementById('file-b').click()">載入 Version B</button>
+  <div class="sep"></div>
+  <div class="mode-group">
+    <button class="btn active" id="btn-rendered" onclick="setMode('rendered')">渲染預覽</button>
+    <button class="btn" id="btn-raw" onclick="setMode('raw')">原始 Markdown</button>
+  </div>
+  <div class="sep"></div>
+  <button class="btn" onclick="loadFromFiles()">自動載入 tools/ab-test/</button>
+</div>
+
+<input type="file" id="file-a" accept=".md,.txt" onchange="handleFile(event, 'a')" />
+<input type="file" id="file-b" accept=".md,.txt" onchange="handleFile(event, 'b')" />
+
+<div class="panels">
+  <!-- Panel A -->
+  <div class="panel" id="panel-a">
+    <div class="panel-header">
+      <span class="version-badge badge-a">VERSION A</span>
+      <span class="panel-label" id="label-a">現有引擎 — YS Engine V2</span>
+    </div>
+    <div class="panel-drop"
+         ondrop="dropFile(event, 'a')"
+         ondragover="dragOver(event, 'a')"
+         ondragleave="dragLeave(event, 'a')"
+         onclick="document.getElementById('file-a').click()">
+      <div class="drop-zone" id="dz-a">
+        <div class="drop-icon">📄</div>
+        <div class="drop-text">拖放 version-a.md 到這裡</div>
+        <div class="drop-hint">或點擊選擇檔案</div>
+      </div>
+      <div class="content rendered" id="content-a-rendered"></div>
+      <div class="content raw" id="content-a-raw"><pre id="raw-a"></pre></div>
+    </div>
+  </div>
+
+  <!-- Panel B -->
+  <div class="panel" id="panel-b">
+    <div class="panel-header">
+      <span class="version-badge badge-b">VERSION B</span>
+      <span class="panel-label" id="label-b">強化引擎 — 標題公式 + 場景鉤 + 金句 + 視覺標記</span>
+    </div>
+    <div class="panel-drop"
+         ondrop="dropFile(event, 'b')"
+         ondragover="dragOver(event, 'b')"
+         ondragleave="dragLeave(event, 'b')"
+         onclick="document.getElementById('file-b').click()">
+      <div class="drop-zone" id="dz-b">
+        <div class="drop-icon">📄</div>
+        <div class="drop-text">拖放 version-b.md 到這裡</div>
+        <div class="drop-hint">或點擊選擇檔案</div>
+      </div>
+      <div class="content rendered" id="content-b-rendered"></div>
+      <div class="content raw" id="content-b-raw"><pre id="raw-b"></pre></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentMode = 'rendered';
+  const data = { a: null, b: null };
+
+  // ── File loading ──
+
+  function handleFile(event, version) {
+    const file = event.target.files[0];
+    if (!file) return;
+    readFile(file, version);
+  }
+
+  function dropFile(event, version) {
+    event.preventDefault();
+    dragLeave(event, version);
+    const file = event.dataTransfer.files[0];
+    if (file) readFile(file, version);
+  }
+
+  function readFile(file, version) {
+    const reader = new FileReader();
+    reader.onload = (e) => renderContent(e.target.result, version, file.name);
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  function dragOver(event, version) {
+    event.preventDefault();
+    document.getElementById('dz-' + version).classList.add('dragging');
+  }
+
+  function dragLeave(event, version) {
+    document.getElementById('dz-' + version).classList.remove('dragging');
+  }
+
+  // Attempt to auto-load from tools/ab-test/ via fetch (works if HTML is served, not file://)
+  async function loadFromFiles() {
+    try {
+      const [resA, resB] = await Promise.all([
+        fetch('./ab-test/version-a.md'),
+        fetch('./ab-test/version-b.md'),
+      ]);
+      if (resA.ok) renderContent(await resA.text(), 'a', 'version-a.md');
+      if (resB.ok) renderContent(await resB.text(), 'b', 'version-b.md');
+      if (!resA.ok && !resB.ok) {
+        alert('無法透過 fetch 載入檔案。\n請直接把 .md 檔案拖放到各個面板，或用「載入」按鈕選擇檔案。');
+      }
+    } catch {
+      alert('此頁面是本地 file:// 開啟的，無法自動 fetch。\n請直接把 version-a.md 和 version-b.md 拖放到各個面板。');
+    }
+  }
+
+  // ── Render ──
+
+  function renderContent(text, version, filename) {
+    data[version] = text;
+
+    // Strip YAML frontmatter for word count
+    const stripped = text.replace(/^---[\s\S]*?---\n/, '');
+    const wordCount = stripped.replace(/\s+/g, '').length;
+    document.getElementById('count-' + version).textContent = wordCount.toLocaleString();
+
+    // Update label
+    document.getElementById('label-' + version).textContent = filename;
+
+    // Hide drop zone
+    document.getElementById('dz-' + version).classList.add('hidden');
+
+    // Render HTML
+    document.getElementById('content-' + version + '-rendered').innerHTML = marked.parse(text);
+    document.getElementById('raw-' + version).textContent = text;
+
+    // Show active mode
+    showMode(version);
+  }
+
+  function showMode(version) {
+    ['rendered', 'raw'].forEach(mode => {
+      const el = document.getElementById('content-' + version + '-' + mode);
+      el.classList.toggle('visible', mode === currentMode && data[version] !== null);
+    });
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('btn-rendered').classList.toggle('active', mode === 'rendered');
+    document.getElementById('btn-raw').classList.toggle('active', mode === 'raw');
+    ['a', 'b'].forEach(v => showMode(v));
+  }
+
+  // Sync scroll between panels
+  let isSyncing = false;
+
+  document.querySelectorAll('.panel-drop').forEach((panel, i) => {
+    panel.addEventListener('scroll', () => {
+      if (isSyncing) return;
+      isSyncing = true;
+      const other = document.querySelectorAll('.panel-drop')[i === 0 ? 1 : 0];
+      const ratio = panel.scrollTop / (panel.scrollHeight - panel.clientHeight);
+      other.scrollTop = ratio * (other.scrollHeight - other.clientHeight);
+      requestAnimationFrame(() => { isSyncing = false; });
+    });
+  });
+</script>
+</body>
+</html>
