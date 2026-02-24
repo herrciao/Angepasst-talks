@@ -44,6 +44,8 @@ featured: false
 
 Naval 在最新一期 podcast 裡聊了 AI 與工作的未來。他是 AngelList 的創辦人，現在在 Impossible 重新當 builder，也是那個說出「No entrepreneur is worried about AI taking their job」的人。
 
+> 本文靈感來源：[A Motorcycle for the Mind — Naval Ravikant](https://nav.al/ai)（2026 年 2 月）
+
 大部分人聽到這句話會生氣。
 
 但如果你讓情緒先降一降，仔細想想，他說的其實不是 AI 有多強。
