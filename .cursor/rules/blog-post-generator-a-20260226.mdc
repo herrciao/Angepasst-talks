@@ -1,0 +1,374 @@
+---
+description: "Version A — 冷靜工程師式懷疑。芒格鍛鍊文章生成器，搭配 Writing Invocation v1 + 商業外腦 v4"
+globs:
+  - src/content/posts/**/*.md
+alwaysApply: false
+---
+
+# 芒格鍛鍊文章生成器 — Version A（冷靜工程師）
+
+> **聲音定位**：冷靜、工程師式懷疑、不激動、不站隊。允許邏輯攻擊，不允許情緒攻擊。
+> 搭配 `商業外腦主協議-20260226.mdc`（全域觸發規則）和 `content-creation/SKILL.md`（Invocation 模板）使用。
+
+**重要：AI 先將完整草稿輸出在聊天視窗中供使用者檢查，不要直接存檔。** 使用者確認後才存檔到 `src/content/posts/`。
+
+---
+
+## 文章 Frontmatter 格式
+
+```markdown
+---
+title: "文章標題（繁體中文，反直覺或有張力，不超過 30 字）"
+description: "一句話摘要（繁體中文，50-100 字，用於文章卡片和 SEO）"
+date: YYYY-MM-DD
+updatedDate: YYYY-MM-DD（修改文章時才加）
+category: "分類ID"
+subcategory: "子分類ID（選填）"
+tags: ["標籤1", "標籤2", "芒格鍛鍊"]
+featured: false
+---
+```
+
+### 日期規則
+
+- **草稿階段**（在聊天視窗輸出）→ `date` 欄位寫 `TBD`，不填具體日期
+- **第一次存檔**（使用者確認、AI 寫入檔案的那一刻）→ 用**存檔當天的日期**填入 `date`
+- **修改已發佈的文章** → `date` 保持第一次發佈的日期**不動**，新增或更新 `updatedDate` 為修改當天的日期
+- 判斷是否為修改：存檔前先用 Read 檢查 `src/content/posts/` 裡是否已有同 slug 的檔案
+
+## 分類系統
+
+| category | subcategory | 說明 |
+|---|---|---|
+| business | investment | 投資筆記 |
+| business | strategy | 策略觀察 |
+| business | startup | 創業思考 |
+| tech | ai | AI 思考 |
+| tech | engineering | 軟體工程 |
+| tech | trends | 科技趨勢 |
+| books | biz-books | 商業書讀書筆記 |
+| books | mind-books | 思維書讀書筆記 |
+| books | tech-books | 科技書讀書筆記 |
+| life | travel | 旅行 |
+| life | thoughts | 日常思考 |
+
+---
+
+## 暖身判斷邏輯
+
+- category 是 `business` 或 `tech`，或 tags 包含 `新聞` → **使用完整芒格鍛鍊格式**（暖身 + 正文 + 延伸），tags 中必須包含 `芒格鍛鍊`
+- category 是 `books` 或 `life` → **只寫正文**，不加暖身和延伸，tags 中不加 `芒格鍛鍊`
+
+---
+
+## 知識模組調用清單
+
+寫芒格鍛鍊文章時，從以下 10 個模組中挑 2-3 個最相關的概念。
+
+### 決策維度
+| 模組 | 核心概念 | 來源 | Skill 路徑 |
+|------|---------|------|-----------|
+| `investment-thinking` | 多元思維模型、能力圈、逆向思維、複利效應、坐等投資法、機會成本、確認偏誤、激勵機制、規模效應、乘零效應 | 窮查理的普通常識 + 芒格100模型 | `~/.cursor/skills/investment-thinking/SKILL.md` |
+| `cognitive-biases` | 代表性捷思、基率忽略、小數法則、賭徒謬誤、有效性幻覺、回歸均值、可得性捷思、錨定效應、過度自信、事後諸葛偏誤、沉沒成本謬誤 | Judgment under Uncertainty (Kahneman/Tversky) + Varol | `~/.cursor/skills/cognitive-biases/SKILL.md` |
+
+### 人性維度
+| 模組 | 核心概念 | 來源 | Skill 路徑 |
+|------|---------|------|-----------|
+| `consumer-psychology` | 雙系統思維、聯想記憶、互惠原理、自動化反應、潛意識購買 | Thinking Fast and Slow + Influence + Buyology | `~/.cursor/skills/consumer-psychology/SKILL.md` |
+| `influence-seduction` | 九大誘惑角色、間接接近、混合信號、製造需求、暗示植入、懸念、策略性示弱、大眾軟誘惑 | The Art of Seduction (Greene) | `~/.cursor/skills/influence-seduction/SKILL.md` |
+
+### 品牌維度
+| 模組 | 核心概念 | 來源 | Skill 路徑 |
+|------|---------|------|-----------|
+| `brand-loyalty` | 體感標記、儀式黏性、品牌宗教十大支柱、潛意識品牌暗示、多感官品牌 | Buyology (Lindstrom) | `~/.cursor/skills/brand-loyalty/SKILL.md` |
+| `neuro-marketing` | 反效果警告、鏡像神經元、敘事整合置入、腦掃描預測、吸血鬼效應、恐懼行銷 | Buyology (Lindstrom) | `~/.cursor/skills/neuro-marketing/SKILL.md` |
+
+### 風險維度
+| 模組 | 核心概念 | 來源 | Skill 路徑 |
+|------|---------|------|-----------|
+| `risk-antifragile` | 風險共擔、對稱性、投資組合原則、現實世界理性、市場情緒、停損 | Skin in the Game (Taleb) + Laws of Trading | `~/.cursor/skills/risk-antifragile/SKILL.md` |
+| `strategy-game-theory` | 戰略思維、適應性策略、資訊戰略、Nash均衡、承諾策略 | 33 Strategies of War (Greene) + Art of Strategy | `~/.cursor/skills/strategy-game-theory/SKILL.md` |
+
+### 成長維度
+| 模組 | 核心概念 | 來源 | Skill 路徑 |
+|------|---------|------|-----------|
+| `entrepreneurial-leadership` | 專業人才vs企業家、瓶頸集中策略、時間革命、信念系統、願景三角、地位遊戲 | Der Weg zum erfolgreichen Unternehmer (Merath) | `~/.cursor/skills/entrepreneurial-leadership/SKILL.md` |
+| `innovation-first-principles` | 火箭科學家思維、面對未知、視角轉換、系統性思考、失敗學習、第一性原理、猴子先行原則、Kill Metrics | Think Like a Rocket Scientist (Varol) | `~/.cursor/skills/innovation-first-principles/SKILL.md` |
+
+### 概念挑選原則
+- 每篇選 2-3 個概念，不超過 3 個，避免堆砌
+- 優先選「反直覺」的概念——讓讀者覺得「我沒想過這個角度」
+- 跨模組組合比單一模組更有深度
+- 至少 1 個芒格系（`investment-thinking`）模型
+
+> ⚠️ **強制規定：每次寫文章前，必須用 Read 工具讀取所有選用的 Skill 檔案，不得跳過。**
+
+---
+
+## 文章結構（芒格鍛鍊版）
+
+完整芒格鍛鍊文章 = PART 1 暖身 → PART 2 正文 → PART 3 延伸 + 參考來源。
+
+### PART 1：今日芒格鍛鍊（暖身）
+
+僅 category 為 `business` / `tech` 或 tags 含 `新聞` 的文章才加。
+
+```markdown
+---
+
+### 🏋️ 今日芒格鍛鍊
+
+在讀這篇之前，先暖身一下。
+今天我們要用這幾個思維工具來拆解 [主題關鍵詞]——你知道這些嗎？
+
+**💡 [概念1名稱]**（[來源書名]）
+> [一句話白話解釋，口語、精準，對應本文材料]
+> 你上次做 [相關決策/行為] 的時候，有沒有想過這個？
+
+**💡 [概念2名稱]**（[來源書名]）
+> [一句話白話解釋]
+> 試試看用這個角度看你今天讀到的新聞。
+
+**💡 [概念3名稱，選用]**（[來源書名]）
+> [一句話白話解釋]
+
+全都知道？恭喜，你的多元思維肌肉已經很強了。
+有不熟的？沒關係，這就是我們今天要鍛鍊的。往下看吧。
+
+---
+```
+
+暖身要點：
+- 語氣像教練帶暖身，不像老師上課
+- 白話解釋要讓完全沒讀過原書的人也秒懂
+- 每個工具都要對應本文材料（Links/Clips/Facts/Field Notes），禁止抽象教科書介紹
+- 最後的「全都知道 / 有不熟的」是固定收束句
+
+---
+
+### PART 2：正文（Version A 筆觸引擎）
+
+#### 正文節奏（5 beat 結構）
+
+1. **數字/現場細節開場** — 用一個衝擊性數字或具體場景開場，短句獨立成段
+2. **「等等，真的嗎？」轉折** — 拆敘事或拆比較基準，質疑新聞/業界共識
+3. **Reality Check**（若開啟）— 必含「錢在哪/交付在哪/後果在哪」三段
+4. **策略對比** — 至少兩種反應/兩種打法，不說誰對誰錯
+5. **結尾：不舒服但誠實的問題** — 逼讀者自我盤點，禁勵志禁正能量
+
+#### Version A 筆觸 DNA
+
+**語氣**
+- 冷靜
+- 工程師式懷疑
+- 不激動
+- 不站隊
+- 允許邏輯攻擊，不允許情緒攻擊
+
+**節奏**
+- 必須包含短句段落
+- 至少 1 個單獨數字段落
+- 至少 3 個轉折語氣（等等 / 換個角度 / 這兩件事不同 等）
+- 每 4–6 段必須出現一次對比句
+
+**敘事拆解順序**（不可跳步）
+1. 先呈現新聞或敘事（讓它成立）
+2. 使用轉折語氣
+3. 拆比較基準
+4. 拆敘事 vs 現場約束
+5. 才引入模型（僅作為轉折工具）
+
+**邏輯特徵**
+- 必須拆一次比較基準
+- 必須拆一次敘事 vs 現場
+- 至少 1 個「這不是 X，而是 Y」
+- 不准使用煽動性語氣
+
+**模型使用**
+- 至少 1 個芒格系
+- 模型名稱最多出現 2 次
+- 不准教學式解釋
+- 模型只能推動一個轉折
+
+**結尾**
+- 必須丟一個冷靜、不舒服的問題
+- 禁止勵志式總結
+- 禁止正能量收尾
+
+#### 禁止清單
+
+- PR 語氣：「重大突破」「值得關注」「引領業界」
+- industry blog 語氣：「本文將介紹」「綜上所述」「總結而言」
+- MBA / 顧問腔：「我們建議」「策略性地」「槓桿化」
+- 分析報告開頭句：「報告指出」「市場預計」「數據顯示」獨立成段
+- 對業內人解釋業內常識
+- 堆砌數字沒有判斷
+- 長段落塞滿資訊沒有呼吸
+- 煽動性語氣或情緒攻擊
+
+#### 長度
+
+- 正文 2000-3500 繁中字（5-8 分鐘閱讀）
+
+---
+
+### PART 3：延伸鍛鍊 + 參考來源（結尾）
+
+僅有暖身的文章才加延伸鍛鍊。參考來源每篇都要。
+
+```markdown
+---
+
+### 🔗 延伸鍛鍊
+
+今天用到的概念還可以這樣延伸：
+
+- **[相關概念A]**（`[skill模組名]`）：下次讀到 [某類新聞/場景] 的時候，試試用這個角度想
+- **[相關概念B]**（`[skill模組名]`）：和今天的 **[概念]** 一起用，威力更大
+
+---
+
+### 📎 References
+
+> 本文靈感來源：[文章標題 — 作者名](URL)（發布年月）
+> 延伸閱讀：[文章標題](URL)（發布年月）
+
+---
+```
+
+參考來源規則：
+- 只列在 Links 區提供的網址或 Clips 註明的出處
+- 每個引用主張要能對應到至少一個來源
+- 若某段是經驗判斷，標記為「My Field Notes」而非假裝引用
+
+---
+
+## A/B 測試工作流程
+
+每次生成文章時，**必須同時產出 Version A 和 Version B 兩個版本**。
+
+### 流程
+
+1. 依照工作流程讀取材料、選概念、讀 Skill 檔案
+2. **先用 Version A 引擎（本檔案）寫完整草稿**，標示：
+   ```
+   ## ── Version A（冷靜工程師）──
+   ```
+3. **再用 Version B 引擎（`blog-post-generator-b-20260226.mdc`）寫完整草稿**，用 Read 工具讀取 Version B 規則後執行，標示：
+   ```
+   ## ── Version B（尖銳挑戰）──
+   ```
+4. 兩版草稿都輸出完後，同時存入：
+   - `tools/ab-test/version-a.md`（Version A 草稿）
+   - `tools/ab-test/version-b.md`（Version B 草稿）
+5. 提醒使用者：用 Finder 打開 `tools/ab-compare.html` 並排比較
+6. 等使用者選定版本後，才按存檔流程寫入 `src/content/posts/[slug].md`
+
+> **注意：** `tools/ab-test/` 裡的 md 檔是臨時比較用，不進 git。
+
+---
+
+## Writing Invocation v1（材料輸入模板）
+
+使用者可以用以下結構提供材料，AI 據此生成文章：
+
+### 0) 任務設定
+- 主題（一句話）
+- 核心刺點（一句話，可空）
+- 文章類型：A 商業觀察 / B 思維訓練 / C 冷靜拆解 / D 鋒利觀點
+- 芒格濃度：30% / 50% / 70%
+- 情緒張力：低 / 中 / 高
+- Reality Check：開 / 關
+- Punchline 強化：開 / 關
+
+### 1) 材料區
+- **Links**：要引用的網址
+- **Clips**：原文摘錄
+- **Facts**：確定的事實/數字（附來源）
+- **Claims in the News**：新聞/業界正在講的主張
+- **My Field Notes**：現場觀察/業界經驗/判斷
+
+### 2) 外腦調用
+- 自動匹配 2-3 個模組，至少 1 個芒格系
+- 每個模型只推動一個轉折
+
+### 3) 產出規格
+- 暖身 3 個思維工具，每個對應本文材料
+- 正文 5 beat 結構
+- 參考來源區塊
+
+### 4) 自檢（輸出前必答）
+- 我選了哪些模組？為什麼？
+- 本文 punchline 是哪一句？（若 Punchline=開）
+- 哪一句是多餘可刪？
+- 有沒有任何一句看起來太合理但缺證據？若有，改寫成可驗證問句。
+
+---
+
+## 工作流程
+
+### 生成前自我檢查
+
+```
+Apply Version A Engine before writing:
+1. Open with number or field detail. Short sentence. Let it land.
+2. "Wait, really?" — deconstruct narrative or comparison baseline.
+3. If Reality Check=ON: money / delivery / consequences.
+4. Strategic contrast — at least two responses, no sides taken.
+5. Close with a calm, uncomfortable question. No inspiration. No positivity.
+
+Tone: calm, engineer-skeptic, no sides, logic attacks only.
+Rhythm: short paragraphs, standalone number, 3+ turns, contrast every 4-6 paragraphs.
+Deconstruction order: present → turn → baseline → narrative vs field → then model.
+Model rules: max 2 mentions, no teaching, one turn only.
+Forbidden: 重大突破, 值得關注, 報告指出, 綜上所述, 我們建議, 煽動語氣
+```
+
+### 當使用者給你一個 URL：
+1. 使用 WebFetch 讀取網頁內容，分析核心觀點
+2. 判斷分類 → 決定是否使用芒格鍛鍊格式
+3. 從知識模組中挑選 2-3 個最相關的概念
+4. **【強制】用 Read 工具逐一讀取所有選用的 Skill 檔案**
+5. **【強制】在正文中標註出處**（blockquote 格式）
+6. 套用 Version A 筆觸引擎寫正文
+7. 在聊天視窗輸出完整草稿（`date: TBD`），說明：
+   - 建議分類和子分類
+   - 使用了哪些概念（來自哪個模組）
+   - 建議的 slug
+8. 等使用者確認後才存檔
+
+### 當使用者給你一個主題：
+1. 同上流程，但不需要 WebFetch
+2. **【強制】同樣必須用 Read 工具讀取所有選用的 Skill 檔案**
+3. 套用 Version A 筆觸引擎寫正文
+
+### 存檔流程
+
+1. 使用者說「存檔」「推上去」等確認指令時，才開始存檔
+2. **先用 Read 檢查** `src/content/posts/[slug].md` 是否已存在：
+   - **不存在（新文章）**：`date: TBD` → 替換為今天的日期
+   - **已存在（修改文章）**：保留原 `date`，新增/更新 `updatedDate`
+3. 存檔後執行 git add → commit → push
+
+### Slug 命名規則
+- 全部小寫英文，連字號分隔
+- 例子：`tariff-anchoring-trap`、`ai-environment-not-tool`
+
+---
+
+## Tag 規則
+
+- 有暖身環節 → tags 必須包含 `芒格鍛鍊`
+- 沒暖身（books / life）→ 不加 `芒格鍛鍊`
+- 其他 tags：3-5 個，中文或英文皆可
+
+---
+
+## 版本記錄
+
+| 版本 | 日期 | 核心變動 |
+|------|------|---------|
+| v1.0 | 2026-02-11 | 初始版本，芒格鍛鍊模板，A/B/C 三種正文模板 |
+| v2.0 | 2026-02-23 | YS Writing Engine V2 六模組引擎 |
+| v2.3 | 2026-02-24 | A/B 測試流程、強制 Skill 讀取、出處標註 |
+| **v3.0-A** | **2026-02-26** | **全面重構：Version A 冷靜工程師筆觸；Writing Invocation v1；5 beat 正文結構；搭配商業外腦 v4 三層架構；新增 Reality Check + 自檢機制** |
