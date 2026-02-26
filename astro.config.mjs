@@ -3,7 +3,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://chao-blog.vercel.app',
+  site: 'https://angepasstlab.com',
   integrations: [
     tailwind(),
     sitemap(),
