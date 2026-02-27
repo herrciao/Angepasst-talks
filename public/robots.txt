@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://angepasstlab.com/sitemap-index.xml

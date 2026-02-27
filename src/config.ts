@@ -2,7 +2,7 @@ export const SITE = {
   name: "Chao's Brain",
   tagline: '思考、觀察、記錄',
   description: '分享商業思維、科技觀點、讀書筆記的個人部落格，記錄大腦裡那些值得留下來的想法。',
-  url: 'https://chao-blog.vercel.app',
+  url: 'https://angepasstlab.com',
   author: 'Chao',
   email: 'hello@example.com',
   postsPerPage: 10,
