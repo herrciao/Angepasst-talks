@@ -1,0 +1,26 @@
+---
+// 訂閱功能可接 Buttondown 或 Substack，只需換 action URL
+const formAction = 'https://buttondown.com/api/emails/embed-subscribe/YOUR_USERNAME';
+---
+
+<div class="bg-indigo-50 border border-indigo-100 rounded-lg p-5">
+  <h3 class="font-bold text-gray-900 text-sm mb-1">訂閱電子報</h3>
+  <p class="text-xs text-gray-500 mb-3">每週精選文章直接送進你的信箱</p>
+  <form
+    action={formAction}
+    method="post"
+    class="flex flex-col gap-2"
+    target="_blank"
+  >
+    <input
+      type="email"
+      name="email"
+      placeholder="your@email.com"
+      required
+      class="w-full text-sm px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+    />
+    <button type="submit" class="btn-primary justify-center w-full">
+      訂閱
+    </button>
+  </form>
+</div>

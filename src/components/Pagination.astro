@@ -1,0 +1,79 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function getPageUrl(page: number) {
+  if (page === 1) return baseUrl === '/' ? '/' : baseUrl;
+  return `${baseUrl}/page/${page}`;
+}
+
+// Pre-compute which pages to show and whether to show ellipsis
+type PageItem = { type: 'page'; page: number } | { type: 'ellipsis'; key: string };
+
+const items: PageItem[] = [];
+for (let i = 1; i <= totalPages; i++) {
+  const dist = Math.abs(i - currentPage);
+  const isNear = dist <= 2 || i === 1 || i === totalPages;
+  if (isNear) {
+    const prev = items[items.length - 1];
+    if (prev && prev.type === 'page' && i - prev.page > 1) {
+      items.push({ type: 'ellipsis', key: `ellipsis-${i}` });
+    }
+    items.push({ type: 'page', page: i });
+  }
+}
+---
+
+{totalPages > 1 && (
+  <nav class="flex items-center justify-center gap-1 mt-10" aria-label="分頁">
+    {currentPage > 1 && (
+      <a
+        href={getPageUrl(currentPage - 1)}
+        class="flex items-center gap-1 px-3 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        上一頁
+      </a>
+    )}
+
+    <div class="flex items-center gap-1">
+      {items.map((item) =>
+        item.type === 'ellipsis' ? (
+          <span class="px-2 text-gray-400">…</span>
+        ) : (
+          <a
+            href={getPageUrl(item.page)}
+            class:list={[
+              'w-9 h-9 flex items-center justify-center text-sm rounded-md transition-colors',
+              item.page === currentPage
+                ? 'bg-indigo-600 text-white font-medium'
+                : 'text-gray-600 border border-gray-300 hover:border-indigo-400 hover:text-indigo-600',
+            ]}
+            aria-current={item.page === currentPage ? 'page' : undefined}
+          >
+            {item.page}
+          </a>
+        )
+      )}
+    </div>
+
+    {currentPage < totalPages && (
+      <a
+        href={getPageUrl(currentPage + 1)}
+        class="flex items-center gap-1 px-3 py-2 text-sm text-gray-600 border border-gray-300 rounded-md hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+      >
+        下一頁
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    )}
+  </nav>
+)}

@@ -1,0 +1,246 @@
+---
+description: "Version C — 溫暖教練。芒格鍛鍊文章生成器，有溫度、說故事、像在跟同業朋友聊天，搭配商業外腦 v4"
+globs:
+  - src/content/posts/**/*.md
+alwaysApply: false
+---
+
+# 芒格鍛鍊文章生成器 — Version C（溫暖教練）
+
+> **聲音定位**：謙虛務實、坦率帶溫度、幽默自嘲。像在跟同業朋友喝咖啡聊天，說的是真話，但不會讓人不舒服。
+> 這是三版引擎之一（A 冷靜工程師 / B 尖銳挑戰 / **C 溫暖教練**）。
+> 搭配 `商業外腦主協議-20260226.mdc`（全域觸發規則）使用。
+
+**重要：AI 先將完整草稿輸出在聊天視窗中供使用者檢查，不要直接存檔。** 使用者確認後才存檔到 `src/content/posts/`。
+
+---
+
+## 文章 Frontmatter 格式
+
+```markdown
+---
+title: "文章標題（繁體中文，反直覺或有張力，不超過 30 字）"
+description: "一句話摘要（繁體中文，50-100 字，用於文章卡片和 SEO）"
+date: YYYY-MM-DD
+updatedDate: YYYY-MM-DD（修改文章時才加）
+category: "分類ID"
+subcategory: "子分類ID（選填）"
+tags: ["標籤1", "標籤2", "芒格鍛鍊"]
+featured: false
+---
+```
+
+### 日期規則
+
+- **草稿階段** → `date: TBD`
+- **第一次存檔** → 存檔當天日期
+- **修改已發佈文章** → 保留原 `date`，新增/更新 `updatedDate`
+
+## 分類系統
+
+| category | subcategory | 說明 |
+|---|---|---|
+| business | investment | 投資筆記 |
+| business | strategy | 策略觀察 |
+| business | startup | 創業思考 |
+| tech | ai | AI 思考 |
+| tech | engineering | 軟體工程 |
+| tech | trends | 科技趨勢 |
+| books | biz-books | 商業書讀書筆記 |
+| books | mind-books | 思維書讀書筆記 |
+| books | tech-books | 科技書讀書筆記 |
+| life | travel | 旅行 |
+| life | thoughts | 日常思考 |
+
+---
+
+## 暖身判斷邏輯
+
+- category 是 `business` 或 `tech`，或 tags 包含 `新聞` → **完整芒格鍛鍊格式**
+- category 是 `books` 或 `life` → **只寫正文**
+
+---
+
+## 知識模組調用清單
+
+同 Version A，從 10 個知識模組中挑 2-3 個。
+
+> ⚠️ **強制規定：每次寫文章前，必須用 Read 工具讀取所有選用的 Skill 檔案，不得跳過。**
+
+---
+
+## 文章結構（芒格鍛鍊版）
+
+### PART 1：今日芒格鍛鍊（暖身）
+
+```markdown
+---
+
+### 🏋️ 今日芒格鍛鍊
+
+在讀這篇之前，先暖身一下。
+今天我們要用這幾個思維工具來拆解 [主題關鍵詞]——你知道這些嗎？
+
+**💡 [概念1名稱]**（[來源書名]）
+> [一句話白話解釋，像在跟朋友解釋，帶一點自嘲或幽默]
+> 你上次 [相關情境] 的時候，有沒有想過這個？
+
+**💡 [概念2名稱]**（[來源書名]）
+> [一句話白話解釋]
+> 說真的，這個我自己也中過。
+
+**💡 [概念3名稱，選用]**（[來源書名]）
+> [一句話白話解釋]
+
+全都知道？恭喜，你的多元思維肌肉已經很強了。
+有不熟的？沒關係，這就是我們今天要鍛鍊的。往下看吧。
+
+---
+```
+
+暖身要點：
+- 語氣像教練帶暖身，不像老師上課
+- 可以帶自嘲（「這個我自己也踩過坑」）
+- 每個工具對應本文材料，但用故事感帶出
+
+---
+
+### PART 2：正文（Version C 筆觸引擎 — 溫暖教練）
+
+#### 正文節奏（5 beat 結構，但用故事帶）
+
+1. **場景/故事開場** — 用一個業內人都有感的場景或小故事開頭，細節具體，讓讀者「看到」那個畫面。可以用數字，但用場景包裝。
+2. **「等等，這跟我想的不一樣」轉折** — 像聊天到一半突然說「但你有沒有想過...」，用對話感帶出拆解
+3. **Reality Check**（若開啟）— 用聊天語氣問「錢從哪來？誰在扛？如果搞砸了呢？」
+4. **策略對比** — 像在描述兩個你認識的人做了不同選擇，有溫度地呈現，不評判
+5. **結尾：真誠提問 + 互動** — 丟一個讓人想回應的問題，語氣真誠不逼迫
+
+#### Version C 筆觸 DNA
+
+**語氣**
+- 謙虛務實
+- 坦率帶溫度
+- 幽默自嘲（適度，不刻意）
+- 像在跟同業朋友喝咖啡聊天
+- 說的是真話，但讓人聽得進去
+
+**節奏**
+- 允許場景敘事開場（「那天消息傳來的時候...」「你有沒有遇過這種情況...」）
+- 段落可以比 A/B 長一點，允許 5-6 句的連貫段
+- 口語化連接詞自然出現：「其實」「說真的」「畢竟」「你知道嗎」「老實說」
+- 短句和長句交替，像說話的節奏
+- 每 3-4 段一個對話感問句
+
+**敘事拆解順序**（同新版邏輯，但用故事和對話帶出）
+1. 先用場景或故事呈現新聞/敘事（讓讀者進入情境）
+2. 用對話語氣轉折（「但你有沒有想過...」「等等，這裡有個地方怪怪的」）
+3. 拆比較基準（用「算給你看」的語氣，像在白板上畫給朋友看）
+4. 拆敘事 vs 現場約束（用業內人的真實感受校準）
+5. 模型融入對話，不獨立教學
+
+**模型使用**
+- 模型融入對話中，像在跟朋友介紹一本好書：「Munger 有一招叫逆向思維，很簡單——不問怎麼贏，先問怎麼會輸」
+- 允許比 A/B 多一到兩句解釋，但必須口語化，不能變成教學段
+- 模型仍然只推動一個轉折
+- 模型名稱最多出現 3 次（比 A/B 的 2 次多 1 次，因為對話中自然會多提一次）
+
+**結尾**
+- 真誠提問（「你覺得呢？」「你的經驗是什麼？」）
+- 可以有互動邀請（「歡迎留言，我們一起想」）
+- 允許帶一點溫度，但不能變成雞湯或正能量
+- 不是逼選擇（那是 B 的），是邀請思考
+
+**特色元素**
+- 允許第一人稱經驗分享（「說真的，這個我之前也踩過坑」）
+- 允許場景重現（「想像一下，你坐在辦公室裡...」）
+- 允許類比（「這就像你去吃自助餐...」）
+
+#### 禁止清單
+
+- 空泛雞湯
+- 炫耀或故弄玄虛
+- 數據不解讀
+- PR 語氣、industry blog 語氣、MBA 顧問腔
+- 教學模式（模型解釋變成課堂講義）
+- 假裝謙虛的優越感
+
+#### 長度
+
+- 正文 1800-3000 繁中字（4-7 分鐘閱讀，比 A/B 可以稍短）
+
+---
+
+### PART 3：延伸鍛鍊 + 參考來源
+
+```markdown
+---
+
+### 🔗 延伸鍛鍊
+
+今天用到的概念還可以這樣延伸：
+
+- **[相關概念A]**（`[skill模組名]`）：[用場景描述的延伸方向]
+- **[相關概念B]**（`[skill模組名]`）：和今天的 **[概念]** 一起用，你會發現...
+
+你覺得今天這個分析有道理嗎？還是你有不同的看法？
+歡迎留言交流，我們一起鍛鍊。
+
+---
+
+### 📎 References
+
+> 本文靈感來源：[文章標題 — 作者名](URL)（發布年月）
+
+---
+```
+
+---
+
+## 工作流程
+
+### 生成前自我檢查
+
+```
+Apply Version C Engine before writing:
+1. Open with a scene or story. Make the reader SEE it. Details matter.
+2. "Wait, have you thought about this?" — turn with conversational tone, like chatting over coffee.
+3. If Reality Check=ON: "Where does the money come from? Who's carrying this? What if it goes wrong?"
+4. Strategic contrast — describe two people who made different choices. No judging.
+5. Close with a genuine question. Invite thinking, not force choosing.
+
+Tone: warm, honest, coach-like, slight self-deprecation.
+Rhythm: scene openings, conversational connectors (其實/說真的/畢竟), longer paragraphs OK.
+Narrative: same deconstruction ORDER as A/B, but wrapped in story and dialogue.
+Model rules: weave into conversation ("Munger has this thing called..."), max 3 mentions, one turn only.
+Ending: genuine question + interaction invite. Warmth OK, soup NOT OK.
+Forbidden: 雞湯, 炫耀, 故弄玄虛, PR, MBA, 教學模式
+```
+
+### URL / 主題流程
+
+同 Version A 的工作流程，但套用 Version C 筆觸引擎。
+
+### 存檔流程
+
+同 Version A。
+
+### 自檢（輸出前必答）
+- 我選了哪些模組？為什麼？
+- 這篇讀起來像在聊天嗎？有沒有掉進教學模式？
+- 場景開場夠具體嗎？讀者能「看到」那個畫面嗎？
+- 模型是融在對話裡，還是又變成獨立解釋段了？
+- 結尾是真誠的提問，還是敷衍的「你覺得呢」？
+
+---
+
+## Tag 規則
+
+同 Version A。
+
+---
+
+## 版本記錄
+
+| 版本 | 日期 | 核心變動 |
+|------|------|---------|
+| **v1.0-C** | **2026-02-26** | **初始版本：溫暖教練定位；舊版筆觸風格（教練感/溫度/說故事）+ 新版寫作邏輯（5-beat/Invocation/自檢/Reality Check）；搭配商業外腦 v4** |

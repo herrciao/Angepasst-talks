@@ -1,0 +1,29 @@
+---
+description: 部署安全規則：推送前必須本地 build 驗證，避免 Vercel 部署失敗
+globs:
+  - src/**
+  - astro.config.mjs
+  - package.json
+alwaysApply: true
+---
+
+# 部署安全規則
+
+## 推送前強制本地 Build
+
+**每次執行 `git push` 之前，必須先跑 `npx astro build` 確認 build 成功。**
+
+不論改動大小——新文章、改 layout、裝套件、改 config——都要跑。沒有例外。
+
+### 流程
+
+1. 完成所有檔案修改
+2. 執行 `npx astro build`
+3. **Build 成功（exit code 0）** → 才可以 `git add && git commit && git push`
+4. **Build 失敗** → 修正錯誤 → 重新 build → 直到成功才推送
+
+### 常見陷阱
+
+- **第三方套件 import 方式**：安裝新套件後，先查套件文件確認正確的 import 語法（named export vs default export），不要猜
+- **Astro 元件**：`.astro` 檔案的元件通常是 default export（`import Foo from '...'`），不是 named export（`import { Foo } from '...'`）
+- **Content schema 不符**：新增文章的 frontmatter 必須符合 `src/content/config.ts` 的 schema 定義
