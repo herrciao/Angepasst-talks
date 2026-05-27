@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
@@ -10,7 +10,14 @@ export async function getStaticPaths() {
   }));
 }
 
-const { post } = Astro.props;
+const { post: propPost } = Astro.props;
+const { slug } = Astro.params;
+const post = propPost ?? await getEntry('posts', slug as string);
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
 const { Content, headings } = await render(post);
 ---
