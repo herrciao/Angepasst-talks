@@ -1,0 +1,22 @@
+{
+  "version": "0.1",
+  "siteName": "Chao's Brain",
+  "siteUrl": "https://angepasstlab.com",
+  "language": "zh-TW",
+  "markets": ["Taiwan", "Germany", "United States"],
+  "timezone": "Europe/Berlin",
+  "schedule": "Monday 09:00",
+  "cadence": "weekly",
+  "candidateCount": 5,
+  "publicationTargetPerWeek": 1,
+  "requiredGates": [
+    "human-fact-review",
+    "seo-check",
+    "production-build",
+    "owner-publish-authorization"
+  ],
+  "measurementDays": [7, 28, 90],
+  "pilotWeeks": 4,
+  "automationAfterPilotReviewOnly": true,
+  "automaticPublishing": false
+}
