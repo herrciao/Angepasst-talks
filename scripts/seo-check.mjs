@@ -46,7 +46,13 @@ function internalTargetExists(href, route = '/') {
 }
 
 const files = walk(dist);
-const htmlFiles = files.filter((file) => file.endsWith('.html'));
+const htmlFiles = files.filter((file) => {
+  if (!file.endsWith('.html')) return false;
+
+  const path = relative(dist, file).split(sep).join('/');
+  const isGoogleVerificationFile = !path.includes('/') && /^google[a-z0-9]+\.html$/i.test(path);
+  return !isGoogleVerificationFile;
+});
 const issues = [];
 const inbound = new Map(htmlFiles.map((file) => [routeFor(file), 0]));
 
