@@ -1,7 +1,7 @@
 # Content Brief — 從零到一的現場筆記：主線起點
 
 - Run ID：2026-09-24-field-notes-pilot（使用者指定的單次內容工作；未啟動每週 Runtime 或自動化）
-- 狀態：`validated`
+- 狀態：`published`
 - 初稿授權範圍：使用者於本次對話確認執行前一版規劃的第一批，先檢視成果。僅新增一篇本地草稿、此 Brief 與既有 SEO Changelog 的新增紀錄。
 - 發布授權：使用者在檢視本地草稿後明確指示「ok post it」，核准此篇文章及其方法示範發布，並授權必要的檢查、提交、推送與部署流程；不延伸到其他文章修改或任何刪除。
 - 刪除限制：使用者再次明確要求，任何本地文章或其他有意義內容的刪除，均須另行取得明確同意。本批不刪除、搬移或覆寫任何既有文章。
@@ -13,7 +13,7 @@
 - Existing-site check：檢視既有文章清單、Mac mini 日誌 01／02、加州客戶採購文章、About 與從 F-35 的中國磁鐵到地獄火的大腸桿菌。既有內容包含技術操作、採購判斷與宏觀分析，尚無此主線的起點文章。
 - SERP gap：尚未研究；本批不提出搜尋量、排名或流量成效預測。
 - 新增或更新：新增本地草稿；不修改任何既有文章。
-- 預計 URL：`/posts/field-notes-from-zero-to-one`（尚未發布）
+- 公開 URL：`https://www.angepasstlab.com/posts/field-notes-from-zero-to-one`（正式站已驗證 HTTP 200）
 - 文章檔案：`src/content/posts/field-notes-from-zero-to-one.mdoc`
 - Cannibalization 判斷：本篇主旨是作者的現場紀錄方式與陪跑觀點。Mac mini 只作短場景並連回原操作日誌；加州文章只連回原採購觀察，再明示假設性的起手方式。不重寫遠端設定教學或既有採購比較，保留原文全文與 URL。
 - 商業目標：讓讀者理解作者如何參與真實工作，逐步形成具體交流；本批不建立服務套餐、申請漏斗或成交 KPI。
@@ -25,7 +25,7 @@
 - Meta description：從德國操作台灣的 Mac mini，連上之後還有延遲要處理。從這段實作開始，記錄我在從零到一的路上，如何看待資料、判斷與下一步，也說說為什麼自己還在跑，會希望有人一起看路。
 - Category／Subcategory：`business`／`startup`
 - Tags：從零到一的現場筆記、實作紀錄、創業、跨國協作
-- Draft：`false`，依使用者「ok post it」核准切換為可發布；尚須通過 build、SEO 檢查與部署驗證。
+- Draft：`false`，依使用者「ok post it」核准發布；build、SEO 檢查及正式站驗證均已完成。
 - Date：2026-09-24，草稿建立與本次核准發布日期相同，保留原日期。
 
 ## 結構
@@ -90,6 +90,17 @@
 2. `approved`：作者明確指示「ok post it」；只將此文 `draft` 改為 `false`，正文保持核准版本。
 3. `built`：在獨立完整副本執行 `ASTRO_TELEMETRY_DISABLED=1 npm run build` 成功，產生 119 個頁面；保留原專案所有檔案與既有 build 產物。
 4. `validated`：SEO check 為 0 errors。確認新文 canonical、唯一 H1、BlogPosting、首頁、創業分類、RSS 與 sitemap；原有 22 篇文章的內容與 Git HEAD 完全一致，沒有刪除。
+5. `committed`：提交 `07c4c7b`（Publish opening field notes from zero to one），包含新文與兩份內容／SEO 紀錄，沒有既有文章修改或刪除。
+6. `published`：`07c4c7b` 已推送至 `origin/main`；GitHub 的 Vercel status 為 `success`，部署識別為 `DsnJgn329wiTXmHoG25TaFXPwJhQ`。正式文章、首頁、RSS 與 sitemap 均回應 HTTP 200。
+
+## 正式站驗證
+
+- 公開頁：`https://www.angepasstlab.com/posts/field-notes-from-zero-to-one`。
+- 原設定網域 `https://angepasstlab.com` 依現有站台設定導向 `www`；本批未修改網域或 canonical 設定。
+- 正式頁面含核准標題、陪跑核心句與「以下是方法示範」，未帶 `noindex`。
+- 首頁及 RSS 均含新文章連結；正式 sitemap 含全部 23 篇文章 URL，原有文章沒有缺漏。
+- 既有 22 篇文章內容與發布前版本一致；本次沒有刪除任何文章。
+- 未提交 Search Console indexing；搜尋曝光與實際轉換成效尚未提供。
 
 ## 本批唯讀檢查結果
 

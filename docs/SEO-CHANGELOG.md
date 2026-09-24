@@ -32,3 +32,12 @@
 - SEO check：0 errors、122 warnings。警告為全站既有預設 OG 圖片缺漏，以及首頁與兩個分頁缺少 H1，留待另案處理。
 - 新文 canonical、H1、BlogPosting、首頁、創業分類、RSS 與 sitemap 均已確認。
 - 舊有 22 篇文章逐一與 Git HEAD 比對，沒有內容變更或刪除；未變更既有公開 URL。
+
+## 2026-09-24 — 現場筆記首篇正式上線
+
+- 文章提交：`07c4c7b`，已推送至 `origin/main`，Vercel 部署成功。
+- 內容狀態已依序完成 `waiting-technical-review → approved → built → validated → committed → published`。
+- 正式網址：`https://www.angepasstlab.com/posts/field-notes-from-zero-to-one`，HTTP 200，標題與核准內容已驗證。
+- 正式首頁、RSS 與 sitemap 均回應 HTTP 200 並包含新文章；sitemap 中全部 23 篇文章 URL 均存在。
+- 網站既有非 www 導向 www 的行為保留，本批未修改網域、canonical 或任何舊文。
+- 本次沒有刪除本地文章或其他有意義內容，未提交 Search Console indexing。
